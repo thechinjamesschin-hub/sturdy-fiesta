@@ -32,14 +32,16 @@ app.post('/execute', (req, res) => {
 // GET /script/:key — executor calls this to fetch latest script
 app.get('/script/:key', (req, res) => {
   const { key } = req.params
+  res.type('text/plain')
+  
   if (!VALID_KEYS.includes(key))
-    return res.status(403).send('-- Invalid key')
+    return res.status(200).send('-- Invalid key')
 
   const script = scriptStore[key]
   if (!script)
-    return res.status(404).send('-- No script stored for this key')
+    return res.status(200).send('-- No script stored for this key')
 
-  res.type('text/plain').send(script)
+  res.send(script)
 })
 
 // Serve the dashboard

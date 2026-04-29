@@ -33,13 +33,16 @@ app.post('/execute', (req, res) => {
 app.get('/script/:key', (req, res) => {
   const { key } = req.params
   res.type('text/plain')
-  
+
   if (!VALID_KEYS.includes(key))
     return res.status(200).send('-- Invalid key')
 
   const script = scriptStore[key]
   if (!script)
     return res.status(200).send('-- No script stored for this key')
+
+  // Clear the script so it doesn't execute twice when polling
+  delete scriptStore[key]
 
   res.send(script)
 })

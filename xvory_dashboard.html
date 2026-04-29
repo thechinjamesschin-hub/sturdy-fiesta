@@ -1,369 +1,531 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Xvory Cloud Platform</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg-base: #030008;
-    --primary: #8a2be2;
-    --primary-glow: rgba(138, 43, 226, 0.5);
-    --secondary: #00d2ff;
-    --secondary-glow: rgba(0, 210, 255, 0.4);
-    --surface-1: rgba(20, 15, 30, 0.6);
-    --surface-2: rgba(35, 25, 50, 0.5);
-    --border: rgba(138, 43, 226, 0.2);
-    --border-hover: rgba(0, 210, 255, 0.5);
-    --text-main: #f0f0f5;
-    --text-muted: #9e9ba8;
-    --success: #00fa9a;
-    --danger: #ff3366;
-    --font-sans: 'Outfit', sans-serif;
-    --font-mono: 'Fira Code', monospace;
-    --radius: 12px;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>XVORY CLOUD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;900&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  body {
-    background-color: var(--bg-base);
-    color: var(--text-main);
-    font-family: var(--font-sans);
-    height: 100vh;
-    overflow: hidden;
-    position: relative;
-  }
+    :root {
+      --bg: #030000;
+      --surface: #0a0202;
+      --surface-hover: #120404;
+      --red-glow: rgba(255, 0, 0, 0.2);
+      --red-glow-strong: rgba(255, 0, 0, 0.4);
+      --red-border: rgba(200, 0, 0, 0.3);
+      --red-main: #ff1a1a;
+      --red-dark: #800000;
+      --text-main: #ffffff;
+      --text-dim: #888888;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-sans: 'Inter', sans-serif;
+    }
 
-  /* Dynamic Animated Background */
-  body::before {
-    content: '';
-    position: fixed;
-    top: -50%; left: -50%; width: 200%; height: 200%;
-    background: 
-      radial-gradient(circle at 50% 50%, var(--primary-glow) 0%, transparent 30%),
-      radial-gradient(circle at 80% 20%, var(--secondary-glow) 0%, transparent 20%);
-    opacity: 0.3;
-    animation: rotateBg 30s linear infinite;
-    pointer-events: none;
-    z-index: 0;
-  }
-  
-  @keyframes rotateBg {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      background-image:
+        linear-gradient(to right, rgba(255, 0, 0, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 0, 0, 0.03) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
 
-  /* Grid overlay */
-  .grid-overlay {
-    position: fixed; inset: 0; pointer-events: none; z-index: 1;
-    background-image: 
-      linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
-    background-size: 40px 40px;
-    mask-image: radial-gradient(circle at center, black, transparent 80%);
-    -webkit-mask-image: radial-gradient(circle at center, black, transparent 80%);
-  }
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 0%, var(--bg) 80%);
+      pointer-events: none;
+      z-index: 0;
+    }
 
-  /* ── GATE ── */
-  .gate {
-    position: fixed; inset: 0; z-index: 100;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    background: rgba(3, 0, 8, 0.85);
-    backdrop-filter: blur(15px);
-    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .gate.out { opacity: 0; transform: scale(1.05); pointer-events: none; }
+    /* GATE */
+    .gate {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
 
-  .gate-logo-container {
-    text-align: center; margin-bottom: 3rem;
-  }
-  .gate-logo {
-    font-size: 4rem; font-weight: 800;
-    letter-spacing: 0.2em; line-height: 1;
-    background: linear-gradient(135deg, var(--secondary), var(--primary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 20px var(--primary-glow));
-    animation: pulse 3s infinite alternate;
-  }
-  @keyframes pulse {
-    0% { filter: drop-shadow(0 0 15px var(--primary-glow)); }
-    100% { filter: drop-shadow(0 0 35px var(--secondary-glow)); }
-  }
-  .gate-sub {
-    font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.4em;
-    color: var(--text-muted); text-transform: uppercase; margin-top: 1rem;
-  }
+    .gate.out {
+      opacity: 0;
+      transform: scale(1.05);
+      pointer-events: none;
+    }
 
-  .gate-card {
-    width: 380px; background: var(--surface-1); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 2.5rem; position: relative;
-    backdrop-filter: blur(20px);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.05);
-  }
+    .logo {
+      font-size: 5rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      color: var(--red-main);
+      text-shadow: 0 0 20px var(--red-main), 0 0 40px var(--red-dark);
+      font-family: var(--font-mono);
+      margin-bottom: 2rem;
+      animation: flicker 4s infinite;
+    }
 
-  .input-group { margin-bottom: 1.5rem; }
-  .input-label {
-    font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.15em;
-    color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.75rem; display: block;
-  }
-  .gate-input {
-    width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px; padding: 1rem 1.25rem;
-    color: var(--text-main); font-family: var(--font-mono); font-size: 1rem;
-    letter-spacing: 0.2em; outline: none; transition: all 0.3s ease;
-  }
-  .gate-input:focus { border-color: var(--secondary); box-shadow: 0 0 15px var(--secondary-glow); }
-  .gate-input.err { border-color: var(--danger); box-shadow: 0 0 15px rgba(255,51,102,0.3); }
+    @keyframes flicker {
 
-  .btn {
-    width: 100%; padding: 1rem; border: none; border-radius: 8px;
-    background: linear-gradient(135deg, var(--primary), #5a189a);
-    color: white; font-family: var(--font-sans); font-size: 1rem; font-weight: 600;
-    letter-spacing: 0.1em; cursor: pointer; position: relative; overflow: hidden;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 25px var(--primary-glow);
-  }
-  .btn:hover {
-    background: linear-gradient(135deg, var(--secondary), var(--primary));
-    transform: translateY(-2px); box-shadow: 0 12px 30px var(--secondary-glow);
-  }
-  .btn:active { transform: translateY(1px); }
+      0%,
+      19.999%,
+      22%,
+      62.999%,
+      64%,
+      64.999%,
+      70%,
+      100% {
+        opacity: 1;
+      }
 
-  /* ── APP ── */
-  .app-container {
-    position: relative; z-index: 10; height: 100vh;
-    display: flex; flex-direction: column;
-    opacity: 0; pointer-events: none; transition: opacity 0.8s 0.3s ease;
-  }
-  .app-container.show { opacity: 1; pointer-events: all; }
+      20%,
+      21.999%,
+      63%,
+      63.999%,
+      65%,
+      69.999% {
+        opacity: 0.4;
+      }
+    }
 
-  /* ── TOPBAR ── */
-  .topbar {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 2rem; height: 70px;
-    background: var(--surface-1); backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    box-shadow: 0 4px 30px rgba(0,0,0,0.3);
-  }
-  .topbar-brand {
-    font-size: 1.5rem; font-weight: 800; letter-spacing: 0.15em;
-    background: linear-gradient(90deg, #fff, var(--secondary));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
+    .login-box {
+      width: 340px;
+      background: var(--surface);
+      border: 1px solid var(--red-border);
+      padding: 2rem;
+      box-shadow: 0 0 30px rgba(255, 0, 0, 0.1);
+      position: relative;
+      z-index: 1;
+    }
 
-  .nav-tabs { display: flex; gap: 1rem; }
-  .nav-tab {
-    padding: 0.5rem 1.25rem; border-radius: 8px; border: 1px solid transparent;
-    background: transparent; color: var(--text-muted);
-    font-family: var(--font-sans); font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em;
-    cursor: pointer; transition: all 0.3s ease;
-  }
-  .nav-tab.active {
-    background: rgba(138, 43, 226, 0.15); border-color: var(--border);
-    color: var(--text-main); box-shadow: 0 0 15px var(--primary-glow);
-  }
-  .nav-tab:hover:not(.active) { color: var(--text-main); background: rgba(255,255,255,0.05); }
+    .login-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--red-main);
+      box-shadow: 0 0 10px var(--red-main);
+    }
 
-  /* ── MAIN CONTENT ── */
-  .main-content {
-    flex: 1; overflow-y: auto; padding: 2rem;
-  }
-  .view-pane { display: none; animation: fadeIn 0.4s ease forwards; }
-  .view-pane.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .input-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--red-main);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      display: block;
+      letter-spacing: 0.1em;
+    }
 
-  /* ── DASHBOARD ── */
-  .stats-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;
-    margin-bottom: 2rem;
-  }
-  .stat-card {
-    background: var(--surface-1); border: 1px solid rgba(255,255,255,0.05);
-    border-radius: var(--radius); padding: 1.5rem;
-    backdrop-filter: blur(15px); transition: all 0.3s ease;
-    position: relative; overflow: hidden;
-  }
-  .stat-card::before {
-    content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
-    background: var(--primary); transition: width 0.3s ease; opacity: 0.8;
-  }
-  .stat-card:hover { transform: translateY(-5px); border-color: var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
-  .stat-card:hover::before { width: 100%; opacity: 0.05; }
-  
-  .stat-label { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.15em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 1rem; }
-  .stat-value { font-size: 1.5rem; font-weight: 600; }
-  
-  .badge {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    padding: 0.35rem 0.85rem; border-radius: 20px;
-    font-family: var(--font-mono); font-size: 0.8rem; font-weight: 600;
-  }
-  .badge-success { background: rgba(0, 250, 154, 0.1); color: var(--success); border: 1px solid rgba(0, 250, 154, 0.3); }
-  .badge-cloud { background: rgba(0, 210, 255, 0.1); color: var(--secondary); border: 1px solid var(--secondary-glow); }
-  .dot { width: 8px; height: 8px; border-radius: 50%; animation: pulse-dot 2s infinite; }
-  .dot.success { background: var(--success); box-shadow: 0 0 8px var(--success); }
-  .dot.cloud { background: var(--secondary); box-shadow: 0 0 8px var(--secondary); }
-  @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
+    .input-field {
+      width: 100%;
+      background: #000;
+      border: 1px solid var(--red-border);
+      padding: 0.8rem;
+      color: #fff;
+      font-family: var(--font-mono);
+      outline: none;
+      margin-bottom: 1.5rem;
+      transition: all 0.2s;
+    }
 
-  /* ── CONFIG EDITOR ── */
-  .config-workspace {
-    display: grid; grid-template-columns: 1fr 350px; gap: 1.5rem;
-    height: calc(100vh - 140px);
-  }
-  .editor-section {
-    display: flex; flex-direction: column; background: var(--surface-1);
-    border-radius: var(--radius); border: 1px solid var(--border);
-    overflow: hidden; backdrop-filter: blur(15px);
-  }
-  .editor-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05);
-    background: rgba(0,0,0,0.3);
-  }
-  .editor-title { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-muted); }
-  .btn-save {
-    padding: 0.5rem 1.25rem; border-radius: 6px; border: none;
-    background: var(--primary); color: white; font-family: var(--font-sans); font-weight: 600;
-    cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px var(--primary-glow);
-  }
-  .btn-save:hover { background: var(--secondary); box-shadow: 0 4px 20px var(--secondary-glow); }
+    .input-field:focus {
+      border-color: var(--red-main);
+      box-shadow: 0 0 10px var(--red-glow-strong);
+    }
 
-  .code-editor {
-    flex: 1; width: 100%; background: #0a0812; border: none;
-    padding: 1.5rem; color: #a19bb5; font-family: var(--font-mono); font-size: 0.95rem;
-    line-height: 1.6; resize: none; outline: none;
-  }
-  .code-editor:focus { color: #e4e0f0; }
+    .btn {
+      width: 100%;
+      padding: 0.8rem;
+      background: transparent;
+      border: 1px solid var(--red-main);
+      color: var(--red-main);
+      font-family: var(--font-mono);
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.1em;
+    }
 
-  /* ── HISTORY SIDEBAR ── */
-  .history-sidebar {
-    background: var(--surface-1); border: 1px solid var(--border);
-    border-radius: var(--radius); display: flex; flex-direction: column;
-    overflow: hidden; backdrop-filter: blur(15px);
-  }
-  .history-header {
-    padding: 1rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05);
-    display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3);
-  }
-  .history-count { background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
-  
-  .history-list { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 1rem; }
-  .history-list::-webkit-scrollbar { width: 6px; }
-  .history-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+    .btn:hover {
+      background: var(--red-main);
+      color: #000;
+      box-shadow: 0 0 15px var(--red-main);
+    }
 
-  .history-item {
-    background: var(--surface-2); border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 8px; padding: 1rem; transition: all 0.3s;
-    animation: slideInRight 0.4s ease forwards;
-  }
-  .history-item:hover { border-color: var(--secondary); transform: translateX(-5px); box-shadow: -5px 5px 15px rgba(0,0,0,0.3); }
-  @keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-  
-  .item-title { font-weight: 600; margin-bottom: 0.25rem; font-size: 0.95rem; color: #fff; }
-  .item-time { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); margin-bottom: 1rem; }
-  
-  .item-actions { display: flex; gap: 0.5rem; }
-  .btn-exec {
-    flex: 1; padding: 0.5rem; border-radius: 6px; background: rgba(138, 43, 226, 0.2);
-    border: 1px solid var(--border); color: white; font-family: var(--font-sans); font-size: 0.85rem; font-weight: 600;
-    cursor: pointer; transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 0.5rem;
-  }
-  .btn-exec:hover { background: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
-  .btn-del {
-    padding: 0.5rem 0.8rem; border-radius: 6px; background: transparent; border: 1px solid rgba(255,51,102,0.3);
-    color: var(--danger); cursor: pointer; transition: all 0.2s;
-  }
-  .btn-del:hover { background: var(--danger); color: white; box-shadow: 0 0 15px rgba(255,51,102,0.4); }
+    /* APP CONTAINER */
+    .app {
+      position: relative;
+      z-index: 10;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
 
-  .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-muted); opacity: 0.5; }
-  .empty-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .app.show {
+      opacity: 1;
+      pointer-events: all;
+    }
 
-  /* ── TOAST ── */
-  .toast-container {
-    position: fixed; bottom: 2rem; right: 2rem; z-index: 9999;
-    display: flex; flex-direction: column; gap: 0.5rem; pointer-events: none;
-  }
-  .toast {
-    background: rgba(10, 5, 20, 0.95); border-left: 4px solid var(--primary);
-    padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    font-family: var(--font-mono); font-size: 0.85rem; color: white;
-    transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    backdrop-filter: blur(10px);
-  }
-  .toast.show { transform: translateX(0); }
-  .toast.success { border-left-color: var(--success); }
-  .toast.error { border-left-color: var(--danger); }
+    /* TOP BAR */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 60px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--red-border);
+    }
 
-  @media (max-width: 900px) {
-    .config-workspace { grid-template-columns: 1fr; height: auto; }
-    .history-sidebar { height: 400px; margin-top: 1.5rem; }
-  }
-</style>
+    .topbar-logo {
+      font-family: var(--font-mono);
+      font-weight: 900;
+      color: var(--red-main);
+      font-size: 1.5rem;
+      letter-spacing: 0.1em;
+      text-shadow: 0 0 10px var(--red-glow);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .tab {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      letter-spacing: 0.05em;
+    }
+
+    .tab.active {
+      color: var(--red-main);
+      border-bottom-color: var(--red-main);
+      text-shadow: 0 0 8px var(--red-glow);
+    }
+
+    .tab:hover:not(.active) {
+      color: #fff;
+    }
+
+    /* CONTENT */
+    .content {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* STATS */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--red-border);
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .stat-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--red-main);
+    }
+
+    .stat-title {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .stat-red {
+      color: var(--red-main);
+      text-shadow: 0 0 10px var(--red-glow);
+    }
+
+    /* CONFIG WORKSPACE */
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 1rem;
+      height: calc(100vh - 120px);
+    }
+
+    .editor-container {
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      border: 1px solid var(--red-border);
+    }
+
+    .editor-header {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid var(--red-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 0, 0, 0.05);
+    }
+
+    .editor-title {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--red-main);
+    }
+
+    .btn-sm {
+      padding: 0.4rem 1rem;
+      background: var(--red-dark);
+      border: 1px solid var(--red-main);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-transform: uppercase;
+    }
+
+    .btn-sm:hover {
+      background: var(--red-main);
+      box-shadow: 0 0 10px var(--red-main);
+    }
+
+    .editor-textarea {
+      flex: 1;
+      width: 100%;
+      background: #000;
+      border: none;
+      padding: 1rem;
+      color: #ffcccc;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      resize: none;
+      outline: none;
+    }
+
+    .editor-textarea:focus {
+      color: #fff;
+    }
+
+    /* HISTORY */
+    .history-container {
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      border: 1px solid var(--red-border);
+    }
+
+    .history-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+
+    .history-list::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .history-list::-webkit-scrollbar-thumb {
+      background: var(--red-main);
+    }
+
+    .history-item {
+      border: 1px solid var(--red-border);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: #000;
+      transition: border-color 0.2s;
+    }
+
+    .history-item:hover {
+      border-color: var(--red-main);
+      box-shadow: 0 0 10px var(--red-glow);
+    }
+
+    .hi-title {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: #fff;
+      margin-bottom: 0.3rem;
+    }
+
+    .hi-time {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+    }
+
+    .hi-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-action {
+      flex: 1;
+      padding: 0.4rem;
+      background: transparent;
+      border: 1px solid var(--red-border);
+      color: var(--red-main);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    .btn-action:hover {
+      background: rgba(255, 0, 0, 0.1);
+      border-color: var(--red-main);
+    }
+
+    /* TOAST */
+    .toast-wrapper {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .toast {
+      background: #000;
+      border: 1px solid var(--red-main);
+      padding: 1rem;
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      transform: translateX(120%);
+      transition: transform 0.3s ease;
+      box-shadow: 0 0 15px var(--red-glow);
+    }
+
+    .toast.show {
+      transform: translateX(0);
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="grid-overlay"></div>
-
-<!-- GATE -->
-<div class="gate" id="gate">
-  <div class="gate-card">
-    <div class="gate-logo-container">
-      <div class="gate-logo">XVORY</div>
-      <div class="gate-sub">Cloud Platform</div>
-    </div>
-    <div class="input-group">
-      <label class="input-label">Terminal Access Key</label>
-      <input class="gate-input" id="keyInput" type="password" placeholder="••••••••••" autocomplete="off" />
-    </div>
-    <button class="btn" id="authBtn">Initialize Session</button>
-  </div>
-</div>
-
-<!-- APP -->
-<div class="app-container" id="appContainer">
-  <div class="topbar">
-    <div class="topbar-brand">XVORY</div>
-    <div class="nav-tabs">
-      <button class="nav-tab active" data-target="dashboard">Dashboard</button>
-      <button class="nav-tab" data-target="config">Cloud Config</button>
+  <div class="gate" id="gate">
+    <div class="logo">XVORY</div>
+    <div class="login-box">
+      <label class="input-label">Access Terminal</label>
+      <input type="password" class="input-field" id="keyInput" placeholder="Enter Security Key" autocomplete="off" />
+      <button class="btn" id="authBtn">Connect</button>
     </div>
   </div>
 
-  <div class="main-content">
-    <!-- DASHBOARD VIEW -->
-    <div class="view-pane active" id="view-dashboard">
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-label">System Status</div>
-          <div class="stat-value"><span class="badge badge-success"><span class="dot success"></span>Online</span></div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Execution Engine</div>
-          <div class="stat-value"><span class="badge badge-cloud"><span class="dot cloud"></span>Cloud-Web</span></div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Stored Configurations</div>
-          <div class="stat-value" id="statConfigCount">0</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Last Operation</div>
-          <div class="stat-value" style="font-family: var(--font-mono); font-size: 1rem; color: var(--secondary);" id="statLastOp">Awaiting...</div>
-        </div>
+  <div class="app" id="app">
+    <div class="topbar">
+      <div class="topbar-logo">XVORY_CLOUD</div>
+      <div class="tabs">
+        <button class="tab active" data-target="dashboard">Dashboard</button>
+        <button class="tab" data-target="workspace">Workspace</button>
       </div>
     </div>
 
-    <!-- CONFIG VIEW -->
-    <div class="view-pane" id="view-config">
-      <div class="config-workspace">
-        <div class="editor-section">
-          <div class="editor-header">
-            <span class="editor-title">workspace.lua</span>
-            <button class="btn-save" id="saveBtn">Deploy Config</button>
+    <div class="content">
+      <div class="view active" id="view-dashboard">
+        <div class="stats">
+          <div class="stat-box">
+            <div class="stat-title">Network Status</div>
+            <div class="stat-value stat-red">[ ONLINE ]</div>
           </div>
-          <textarea class="code-editor" id="codeEditor" spellcheck="false">shared.cloudwebsite = {
+          <div class="stat-box">
+            <div class="stat-title">Execution Mode</div>
+            <div class="stat-value">Cloud-Web</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-title">Deployed Payloads</div>
+            <div class="stat-value" id="statCount">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-title">Last Activity</div>
+            <div class="stat-value" style="font-size: 1rem;" id="statLast">N/A</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="view" id="view-workspace">
+        <div class="workspace">
+          <div class="editor-container">
+            <div class="editor-header">
+              <span class="editor-title">payload.lua</span>
+              <button class="btn-sm" id="deployBtn">Deploy Config</button>
+            </div>
+            <textarea class="editor-textarea" id="editor" spellcheck="false">shared.cloudwebsite = {
     ["Method"] = "Cloud-Web", -- Table, Cloud Web;
 
     ["Job"] = {
@@ -373,188 +535,153 @@
 
 if shared.cloudwebsite["Method"] == "Cloud-Web" then
     print("[Xvory] Executing Cloud-Web Job: " .. tostring(shared.cloudwebsite["Job"]["Table-Job"]))
-    -- Cloud execution logic goes here
+    -- Add your cloud logic here, this will run inside Roblox!
 else
     print("[Xvory] Local mode active.")
 end</textarea>
-        </div>
-        
-        <div class="history-sidebar">
-          <div class="history-header">
-            <span class="editor-title">Deployment History</span>
-            <span class="history-count" id="historyCount">0</span>
           </div>
-          <div class="history-list" id="historyList">
-            <div class="empty-state"><div class="empty-icon">⬡</div><div>No configurations stored</div></div>
+          <div class="history-container">
+            <div class="editor-header">
+              <span class="editor-title">Deployment Log</span>
+            </div>
+            <div class="history-list" id="historyList">
+              <div
+                style="color: var(--text-dim); font-family: var(--font-mono); font-size: 0.8rem; text-align: center; margin-top: 2rem;">
+                No payloads deployed.</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="toast-container" id="toastContainer"></div>
+  <div class="toast-wrapper" id="toastWrapper"></div>
 
-<script>
-  // Configuration
-  const VALID_KEYS = ["XVORY-1234", "XVORY-ELITE", "XVORY-DEV"];
-  const RAILWAY_URL = window.location.origin; // Dynamically uses current host
+  <script>
+    // Hardcoded to prevent local file:// 404 errors when opened locally
+    const RAILWAY_URL = "https://test-production-7e81.up.railway.app";
+    const VALID_KEYS = ["XVORY-1234", "XVORY-ELITE", "XVORY-DEV"];
 
-  let sessionKey = "";
-  let savedConfigs = [];
+    let sessionKey = "";
+    let configs = [];
 
-  // DOM Elements
-  const gate = document.getElementById('gate');
-  const appContainer = document.getElementById('appContainer');
-  const keyInput = document.getElementById('keyInput');
-  const authBtn = document.getElementById('authBtn');
-  const navTabs = document.querySelectorAll('.nav-tab');
-  const viewPanes = document.querySelectorAll('.view-pane');
-  const codeEditor = document.getElementById('codeEditor');
-  const saveBtn = document.getElementById('saveBtn');
-  const historyList = document.getElementById('historyList');
-  const historyCount = document.getElementById('historyCount');
-  const statConfigCount = document.getElementById('statConfigCount');
-  const statLastOp = document.getElementById('statLastOp');
-  const toastContainer = document.getElementById('toastContainer');
+    const gate = document.getElementById('gate');
+    const app = document.getElementById('app');
+    const keyInput = document.getElementById('keyInput');
+    const authBtn = document.getElementById('authBtn');
+    const tabs = document.querySelectorAll('.tab');
+    const views = document.querySelectorAll('.view');
+    const editor = document.getElementById('editor');
+    const deployBtn = document.getElementById('deployBtn');
+    const historyList = document.getElementById('historyList');
+    const toastWrapper = document.getElementById('toastWrapper');
+    const statCount = document.getElementById('statCount');
+    const statLast = document.getElementById('statLast');
 
-  // Utilities
-  function showToast(message, type = 'success') {
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.textContent = message;
-    toastContainer.appendChild(toast);
-    
-    setTimeout(() => toast.classList.add('show'), 10);
-    setTimeout(() => {
-      toast.classList.remove('show');
-      setTimeout(() => toast.remove(), 400);
-    }, 4000);
-  }
-
-  function parseJobName(code) {
-    const match = code.match(/\["Table-Job"\]\s*=\s*"([^"]+)"/);
-    return match ? match[1] : "Unnamed Job";
-  }
-
-  function escapeHTML(str) {
-    return str.replace(/[&<>'"]/g, tag => ({
-      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
-    }[tag]));
-  }
-
-  // Authentication
-  function authenticate() {
-    const val = keyInput.value.trim().toUpperCase();
-    if (VALID_KEYS.includes(val)) {
-      sessionKey = val;
-      gate.classList.add('out');
-      setTimeout(() => appContainer.classList.add('show'), 400);
-      showToast('Session Initialized');
-    } else {
-      keyInput.classList.add('err');
-      showToast('Access Denied: Invalid Key', 'error');
-      setTimeout(() => keyInput.classList.remove('err'), 1000);
+    function toast(msg) {
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.textContent = msg;
+      toastWrapper.appendChild(t);
+      setTimeout(() => t.classList.add('show'), 10);
+      setTimeout(() => {
+        t.classList.remove('show');
+        setTimeout(() => t.remove(), 300);
+      }, 3000);
     }
-  }
 
-  authBtn.addEventListener('click', authenticate);
-  keyInput.addEventListener('keypress', e => e.key === 'Enter' && authenticate());
+    function auth() {
+      const val = keyInput.value.trim().toUpperCase();
+      if (VALID_KEYS.includes(val)) {
+        sessionKey = val;
+        gate.classList.add('out');
+        setTimeout(() => app.classList.add('show'), 400);
+        toast("SYSTEM ACCESS GRANTED");
+      } else {
+        toast("ACCESS DENIED");
+      }
+    }
 
-  // Navigation
-  navTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      navTabs.forEach(t => t.classList.remove('active'));
-      viewPanes.forEach(p => p.classList.remove('active'));
-      
-      tab.classList.add('active');
-      document.getElementById(`view-${tab.dataset.target}`).classList.add('active');
+    authBtn.addEventListener('click', auth);
+    keyInput.addEventListener('keypress', e => e.key === 'Enter' && auth());
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        views.forEach(v => v.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(`view-${tab.dataset.target}`).classList.add('active');
+      });
     });
-  });
 
-  // Config Management
-  function renderHistory() {
-    statConfigCount.textContent = savedConfigs.length;
-    historyCount.textContent = savedConfigs.length;
-
-    if (savedConfigs.length === 0) {
-      historyList.innerHTML = `<div class="empty-state"><div class="empty-icon">⬡</div><div>No configurations stored</div></div>`;
-      return;
+    function getJobName(code) {
+      const match = code.match(/\["Table-Job"\]\s*=\s*"([^"]+)"/);
+      return match ? match[1] : "Unnamed_Job";
     }
 
-    historyList.innerHTML = savedConfigs.map(cfg => `
-      <div class="history-item" id="item-${cfg.id}">
-        <div class="item-title">Job: ${escapeHTML(cfg.name)}</div>
-        <div class="item-time">${cfg.time}</div>
-        <div class="item-actions">
-          <button class="btn-exec" onclick="executeConfig(${cfg.id})">▶ Send to Cloud</button>
-          <button class="btn-del" onclick="deleteConfig(${cfg.id})">✕</button>
+    function renderHistory() {
+      statCount.textContent = configs.length;
+      if (configs.length === 0) {
+        historyList.innerHTML = `<div style="color: var(--text-dim); font-family: var(--font-mono); font-size: 0.8rem; text-align: center; margin-top: 2rem;">No payloads deployed.</div>`;
+        return;
+      }
+
+      historyList.innerHTML = configs.map(c => `
+      <div class="history-item">
+        <div class="hi-title">Job: ${c.name}</div>
+        <div class="hi-time">${c.time}</div>
+        <div class="hi-actions">
+          <button class="btn-action" onclick="pushToCloud(${c.id})">Send to Cloud</button>
+          <button class="btn-action" onclick="del(${c.id})">Del</button>
         </div>
       </div>
     `).join('');
-  }
-
-  saveBtn.addEventListener('click', () => {
-    const code = codeEditor.value.trim();
-    if (!code) {
-      showToast('Workspace is empty', 'error');
-      return;
-    }
-    
-    if (!code.includes('"Cloud-Web"')) {
-      showToast('Missing "Cloud-Web" configuration', 'error');
-      return;
     }
 
-    const newConfig = {
-      id: Date.now(),
-      name: parseJobName(code),
-      code: code,
-      time: new Date().toLocaleTimeString()
+    deployBtn.addEventListener('click', () => {
+      const code = editor.value.trim();
+      if (!code) return toast("WORKSPACE EMPTY");
+
+      const cfg = {
+        id: Date.now(),
+        name: getJobName(code).replace(/[&<>'"]/g, ''),
+        code: code,
+        time: new Date().toLocaleTimeString()
+      };
+
+      configs.unshift(cfg);
+      renderHistory();
+      toast("CONFIG SAVED LOCALLY");
+    });
+
+    window.del = (id) => {
+      configs = configs.filter(c => c.id !== id);
+      renderHistory();
     };
 
-    savedConfigs.unshift(newConfig);
-    renderHistory();
-    showToast('Configuration Saved');
-  });
+    window.pushToCloud = async (id) => {
+      const cfg = configs.find(c => c.id === id);
+      if (!cfg) return;
 
-  window.deleteConfig = function(id) {
-    savedConfigs = savedConfigs.filter(c => c.id !== id);
-    const el = document.getElementById(`item-${id}`);
-    if (el) {
-      el.style.opacity = '0';
-      el.style.transform = 'translateX(20px)';
-      setTimeout(renderHistory, 300);
-    } else {
-      renderHistory();
-    }
-  };
+      toast("TRANSMITTING...");
+      try {
+        const res = await fetch(`${RAILWAY_URL}/execute`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key: sessionKey, code: cfg.code })
+        });
 
-  window.executeConfig = async function(id) {
-    const cfg = savedConfigs.find(c => c.id === id);
-    if (!cfg) return;
-
-    showToast('Transmitting payload...', 'success');
-    
-    try {
-      const res = await fetch(`${RAILWAY_URL}/execute`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key: sessionKey, code: cfg.code })
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        showToast(data.note || 'Payload deployed to cloud successfully');
-        statLastOp.textContent = new Date().toLocaleTimeString();
-      } else {
-        const err = await res.json().catch(() => ({}));
-        showToast(`Deployment Failed: ${err.error || res.status}`, 'error');
+        if (res.ok) {
+          toast("DEPLOYMENT SUCCESS");
+          statLast.textContent = new Date().toLocaleTimeString();
+        } else {
+          toast(`DEPLOYMENT FAILED: ${res.status}`);
+        }
+      } catch (e) {
+        toast("NETWORK ERROR - CLOUD UNREACHABLE");
       }
-    } catch (error) {
-      showToast('Network Error: Could not reach endpoint', 'error');
-    }
-  };
-</script>
+    };
+  </script>
 </body>
+
 </html>

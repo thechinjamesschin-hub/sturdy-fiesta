@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/xvory_dashboard.html" }
+  ]
+}

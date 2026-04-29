@@ -1,0 +1,6 @@
+{
+  "name": "xvory-dashboard",
+  "scripts": {
+    "start": "npx serve . -p $PORT"
+  }
+}
